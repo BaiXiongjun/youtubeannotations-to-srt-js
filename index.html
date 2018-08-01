@@ -6,9 +6,9 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
           
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.15/toaster.min.css" />
-    <link rel="stylesheet" href="https://rawgit.com/germanger/angular-vertical-resizer/master/vertical-resizer.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/toaster.min.css" />
+    <link rel="stylesheet" href="css/vertical-resizer.min.css" />
     
     <style>
         h2 {
@@ -20,12 +20,12 @@
         }
     </style>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.15/toaster.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://rawgit.com/germanger/angular-vertical-resizer/master/vertical-resizer.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/ui-bootstrap.min.js"></script>
+    <script src="js/ui-bootstrap-tpls.min.js"></script>
+    <script src="js/toaster.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/vertical-resizer.min.js"></script>
 
     <script>
         angular.module('youtubeAnnotationsToSrtApp', ['ui.bootstrap', 'toaster', 'verticalResizer']);
@@ -68,13 +68,13 @@
             };
             
             $scope.formatTime = function(timeCode) {
-                if (timeCode.length == 9) {
-                    return "00:" + timeCode;
-                } else if (timeCode.length == 8) {
-                    return "00:0" + timeCode;
-                } else if (timeCode.length == 6) {
-                    return "00:00:" + timeCode;
-                }
+                //if (timeCode.length == 9) {
+                //    return "00:" + timeCode;
+                //} else if (timeCode.length == 8) {
+                //    return "00:0" + timeCode;
+                //} else if (timeCode.length == 6) {
+                //    return "00:00:" + timeCode;
+                //}
                 
                 return timeCode;
             };
@@ -90,8 +90,8 @@
                     $(xmlDoc).find("annotation").each(function(index) {
                         $scope.subtitleLines.push({
                             text: $(this).find("TEXT").text(),
-                            startTime: $scope.formatTime($(this).find("rectRegion:eq(0)").attr("t")),
-                            endTime: $scope.formatTime($(this).find("rectRegion:eq(1)").attr("t"))
+                            startTime: $scope.formatTime($(this).find("anchoredRegion:eq(0)").attr("t")),
+                            endTime: $scope.formatTime($(this).find("anchoredRegion:eq(1)").attr("t"))
                         });
                     });
                     

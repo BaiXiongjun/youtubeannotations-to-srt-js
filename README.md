@@ -7,7 +7,4 @@ It is full client side: only JavaScript and HTML (GUI)
 - Angular (forms and displaying)
 
 ## Use
-You can try this tool here:<br/>
-https://rawgit.com/germanger/youtubeannotations-to-srt-js/master/index.html
-
-Thanks to rawgit
+clone and open index.html.
