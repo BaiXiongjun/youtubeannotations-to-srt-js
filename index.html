@@ -39,7 +39,8 @@
                 scope: {
                     fileReader:"="
                 },
-                link: function(scope, element) {
+                require: "ngModel",
+                link: function(scope, element, attrs, ngModel) {
                     element.on('change', function(changeEvent) {
                         var files = changeEvent.target.files;
                         if (files.length) {
@@ -52,6 +53,7 @@
                             };
 
                             r.readAsText(files[0]);
+                            ngModel.$setViewValue(files);
                         }
                     });
                 }
@@ -66,6 +68,7 @@
             $scope.outputFile = {
                 content: ""
             };
+            $scope.srtFileName = "";
             
             $scope.formatTime = function(timeCode) {
                 //if (timeCode.length == 9) {
@@ -87,12 +90,15 @@
                     // Parse with jQuery
                     var xmlDoc = $.parseXML($scope.xmlContent);
                     
+                    $scope.subtitleLines.splice(0, $scope.subtitleLines.length);
                     $(xmlDoc).find("annotation").each(function(index) {
-                        $scope.subtitleLines.push({
-                            text: $(this).find("TEXT").text(),
-                            startTime: $scope.formatTime($(this).find("anchoredRegion:eq(0)").attr("t")),
-                            endTime: $scope.formatTime($(this).find("anchoredRegion:eq(1)").attr("t"))
-                        });
+                        if ($(this).find("TEXT").length > 0) {
+                            $scope.subtitleLines.push({
+                                text: $(this).find("TEXT").text(),
+                                startTime: $scope.formatTime($(this).find("anchoredRegion:eq(0)").attr("t")),
+                                endTime: $scope.formatTime($(this).find("anchoredRegion:eq(1)").attr("t"))
+                            });
+                        }
                     });
                     
                     // Sort by startTime asc
@@ -105,6 +111,14 @@
                     
                     var blob = new Blob([$scope.outputFile.content], {type: 'text/plain'});
                     $scope.outputFile.blob = URL.createObjectURL(blob);
+                    var fileSplit = $scope.fileSingle[0].name.split('.');
+                    fileSplit.pop();
+                    if (fileSplit.length > 2) {
+                        if (fileSplit[fileSplit.length-1] === "annotations") {
+                            fileSplit.pop();
+                        }
+                    }
+                    $scope.srtFileName = fileSplit.join(".") + ".srt"
                     
                     $scope.error = null;
                 } catch (e) {
@@ -128,7 +142,7 @@
         <h1>Youtube XML Annotations to SRT</h1>
         <p>
             Convert Youtube Annotations (XML) to subtitles format (SRT)<br />
-            Bugs? issues? contribute. The code is available at <strong><a href="https://github.com/germanger/youtubeannotations-to-srt-js" target="_blank">GitHub</a></strong>
+            Bugs? issues? contribute. The code is available at <strong><a href="https://github.com/muziling/youtubeannotations-to-srt-js" target="_blank">GitHub</a></strong>
         </p>
         
         <h2>How to use</h2>
@@ -140,7 +154,7 @@
         <form id="form" method="post" enctype="multipart/form-data" style="margin-top: 50px">
             <div class="form-group">
                 <label>XML file</label>
-                <input type="file" id="files" class="form-control" ng-disabled="processing" accept=".xml" file-reader="xmlContent" />
+                <input type="file" id="files" class="form-control" ng-disabled="processing" ng-model="fileSingle" accept=".xml" file-reader="xmlContent" />
             </div>
         </form>
         
@@ -176,7 +190,7 @@
                 <vertical-resizer target-min-height="50px" target-selector="#subtitleLines"></vertical-resizer>
 
                 <div class="form-group">
-                    <a ng-if="subtitleLines.length > 0" target="_blank" class="btn btn-default btn-info" ng-href="{{ outputFile.blob }}" download="subs.srt">Save (Right click > Save As...)</a>
+                    <a ng-if="subtitleLines.length > 0" target="_blank" class="btn btn-default btn-info" ng-href="{{ outputFile.blob }}" download="{{ srtFileName }}">Save (Right click > Save As...)</a>
                 </div>
             </div>
         </div>
@@ -205,6 +219,7 @@
 
         <h2>Changelog</h2>
         <ul>
+            <li>v1.2 (2018-08-02): Clear output textarea when loaded xml, skip no TEXT, save as file name same as input file name</li>
             <li>v1.1 (2017-07-26): Catch errors in parsing, save to disk (blob), textarea for input</li>
             <li>v1.0 (2015-07-20): First version</li>
         </ul>
