@@ -113,7 +113,7 @@
                     $scope.outputFile.blob = URL.createObjectURL(blob);
                     var fileSplit = $scope.fileSingle[0].name.split('.');
                     fileSplit.pop();
-                    if (fileSplit.length > 2) {
+                    if (fileSplit.length >= 2) {
                         if (fileSplit[fileSplit.length-1] === "annotations") {
                             fileSplit.pop();
                         }
@@ -219,6 +219,7 @@
 
         <h2>Changelog</h2>
         <ul>
+            <li>v1.3 (2018-08-03): fix parse ".annotations" error in file name</li>
             <li>v1.2 (2018-08-02): Clear output textarea when loaded xml, skip no TEXT, save as file name same as input file name</li>
             <li>v1.1 (2017-07-26): Catch errors in parsing, save to disk (blob), textarea for input</li>
             <li>v1.0 (2015-07-20): First version</li>
