@@ -105,6 +105,7 @@
                     $scope.subtitleLines = $filter("orderBy")($scope.subtitleLines, "startTime");
                     
                     // Create file content
+                    $scope.outputFile.content = "";
                     for (var i = 0; i < $scope.subtitleLines.length; i++) {
                         $scope.outputFile.content += i + "\r\n" + $scope.subtitleLines[i].startTime + " --\> " + $scope.subtitleLines[i].endTime + "\r\n" + $scope.subtitleLines[i].text + "\r\n\r\n";
                     }
@@ -219,6 +220,7 @@
 
         <h2>Changelog</h2>
         <ul>
+            <li>v1.4 (2018-08-06): clear file content variable when load xml file</li>
             <li>v1.3 (2018-08-03): fix parse ".annotations" error in file name</li>
             <li>v1.2 (2018-08-02): Clear output textarea when loaded xml, skip no TEXT, save as file name same as input file name</li>
             <li>v1.1 (2017-07-26): Catch errors in parsing, save to disk (blob), textarea for input</li>
